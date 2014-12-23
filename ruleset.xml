@@ -29,5 +29,19 @@
 
  <!-- use squiz sniff for space around operators -->
  <rule ref="Squiz.WhiteSpace.OperatorSpacing"/>
+
+ <!-- Variable must be camel case -->
+ <rule ref="Zend.NamingConventions.ValidVariableName" />
+
+ <!-- Variable may contain numbers -->
+ <rule ref="Zend.NamingConventions.ValidVariableName.ContainsNumbers">
+  <severity>0</severity>
+ </rule>
+
+ <!-- Private properties must not be prefixed with underscore -->
+ <rule ref="Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore">
+  <severity>0</severity>
+ </rule>
+
 </ruleset>
 
