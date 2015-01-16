@@ -161,25 +161,6 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
     } // end isInheritDoc()
 
     /**
-     * Process the function parameter comments.
-     *
-     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
-     * @param int                  $stackPtr     The position of the current token
-     *                                           in the stack passed in $tokens.
-     * @param int                  $commentStart The position in the stack where the comment started.
-     *
-     * @return void
-     */
-//    protected function processParams(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $commentStart)
-//    {
-//        if ($this->isInheritDoc()) {
-//            return;
-//        }
-//
-//        parent::processParams($phpcsFile, $stackPtr, $commentStart);
-//    } // end processParams()
-
-    /**
      * Is the return statement matching?
      *
      * @param array $tokens    Array of tokens
