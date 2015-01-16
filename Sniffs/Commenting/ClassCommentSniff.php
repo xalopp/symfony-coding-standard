@@ -47,60 +47,111 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
      * @var array
      */
     protected $tags = array(
-        'category'   => array(
+        '@category'   => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'precedes @package',
         ),
-        'package'    => array(
+        '@package'    => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @category',
         ),
-        'subpackage' => array(
+        '@subpackage' => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @package',
         ),
-        'author'     => array(
+        '@author'     => array(
             'required'       => false,
             'allow_multiple' => true,
-            'order_text'     => 'follows @subpackage (if used) or @package',
         ),
-        'copyright'  => array(
+        '@copyright'  => array(
             'required'       => false,
             'allow_multiple' => true,
-            'order_text'     => 'follows @author',
         ),
-        'license'    => array(
+        '@license'    => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @copyright (if used) or @author',
         ),
-        'version'    => array(
+        '@version'    => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @license',
         ),
-        'link'       => array(
+        '@link'       => array(
             'required'       => false,
             'allow_multiple' => true,
-            'order_text'     => 'follows @version',
         ),
-        'see'        => array(
+        '@see'        => array(
             'required'       => false,
             'allow_multiple' => true,
-            'order_text'     => 'follows @link',
         ),
-        'since'      => array(
+        '@since'      => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @see (if used) or @link',
         ),
-        'deprecated' => array(
+        '@deprecated' => array(
             'required'       => false,
             'allow_multiple' => false,
-            'order_text'     => 'follows @since (if used) or @see (if used) or @link',
         ),
     );
+
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return int
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens    = $phpcsFile->getTokens();
+
+        $find   = PHP_CodeSniffer_Tokens::$methodPrefixes;
+        $find[] = T_WHITESPACE;
+
+        $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
+        if ($tokens[$commentEnd]['code'] !== T_DOC_COMMENT_CLOSE_TAG
+            && $tokens[$commentEnd]['code'] !== T_COMMENT
+        ) {
+            $phpcsFile->addError('Missing class doc comment', $stackPtr, 'Missing');
+            $phpcsFile->recordMetric($stackPtr, 'Class has doc comment', 'no');
+            return;
+        } else {
+            $phpcsFile->recordMetric($stackPtr, 'Class has doc comment', 'yes');
+        }
+
+        if ($tokens[$commentEnd]['code'] === T_COMMENT) {
+            $phpcsFile->addError('You must use "/**" style comments for a class comment', $stackPtr, 'WrongStyle');
+            return;
+        }
+
+        // Check each tag.
+        $this->processTags($phpcsFile, $stackPtr, $tokens[$commentEnd]['comment_opener']);
+    }
+
+    /**
+     * Process the package tag.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param array                $tags      The tokens for these tags.
+     *
+     * @return void
+     */
+    protected function processPackage(PHP_CodeSniffer_File $phpcsFile, array $tags)
+    {
+        $phpcsFile->addError('the @package annotation is not used', $tags[0], 'InvalidPackage');
+    }
+
+    /**
+     * Process the package tag.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param array                $tags      The tokens for these tags.
+     *
+     * @return void
+     */
+    protected function processSubPackage(PHP_CodeSniffer_File $phpcsFile, array $tags)
+    {
+        $phpcsFile->addError('the @subpackage annotation is not used', $tags[0], 'InvalidSubpackage');
+    }
 }
