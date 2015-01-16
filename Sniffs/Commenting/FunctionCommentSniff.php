@@ -68,56 +68,83 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
     /**
      * Process the return comment of this function comment.
      *
-     * @param int $commentStart The position in the stack where the comment started.
-     * @param int $commentEnd   The position in the stack where the comment ended.
+     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
+     * @param int                  $stackPtr     The position of the current token
+     *                                           in the stack passed in $tokens.
+     * @param int                  $commentStart The position in the stack where the comment started.
      *
      * @return void
      */
-    protected function processReturn($commentStart, $commentEnd)
+    protected function processReturn(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $commentStart)
     {
-        if ($this->isInheritDoc()) {
+        $tokens = $phpcsFile->getTokens();
+
+        // Skip constructor and destructor.
+        $methodName      = $phpcsFile->getDeclarationName($stackPtr);
+        $isSpecialMethod = ($methodName === '__construct' || $methodName === '__destruct');
+
+        if ($isSpecialMethod === true) {
             return;
         }
 
-        $tokens = $this->currentFile->getTokens();
-        $funcPtr = $this->currentFile->findNext(T_FUNCTION, $commentEnd);
-
-        // Only check for a return comment if a non-void return statement exists
-        if (isset($tokens[$funcPtr]['scope_opener'])) {
-            $start = $tokens[$funcPtr]['scope_opener'];
-
-            // iterate over all return statements of this function,
-            // run the check on the first which is not only 'return;'
-            $hasReturn = false;
-            $end = $tokens[$funcPtr]['scope_opener'] + 1;
-            while ($returnToken = $this->currentFile->findNext(T_RETURN, $start, $tokens[$funcPtr]['scope_closer'])) {
-                $closurePtr = $this->currentFile->findPrevious(T_CLOSURE, $returnToken -1, $end);
-                if ($closurePtr) {
-                    $start = $tokens[$closurePtr]['scope_closer'] + 1;
-                    $end   = $start;
-                    continue;
+        $return = null;
+        foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
+            if ($tokens[$tag]['content'] === '@return') {
+                if ($return !== null) {
+                    $error = 'Only 1 @return tag is allowed in a function comment';
+                    $phpcsFile->addError($error, $tag, 'DuplicateReturn');
+                    return;
                 }
 
-                $hasReturn = true;
-
-                if ($this->isMatchingReturn($tokens, $returnToken)) {
-                    parent::processReturn($commentStart, $commentEnd);
-                    break;
-                }
-                $start = $returnToken + 1;
+                $return = $tag;
             }
-
-            $return = $this->commentParser->getReturn();
-
-            if ($hasReturn === false && $return !== null) {
-                $errorPos = $commentStart + $return->getLine();
-
-                $this->currentFile->addError(
-                    'ommit @return tag if the method does not return anything',
-                    $errorPos
-                );
+            if (preg_match('#{@inheritdoc}#i', $tokens[$tag]['content']) === 1) {
+                return;
             }
         }
+
+        $start     = $tokens[$stackPtr]['scope_opener'] + 1;
+        $end       = $tokens[$stackPtr]['scope_closer'] - 1;
+
+        $hasReturnValue = false;
+
+        $doFind = true;
+        while ($doFind) {
+            $returnPtr = $phpcsFile->findNext(T_RETURN, $start, $end);
+            if ($returnPtr !== false) {
+                // ignore nested functions / closures
+                if ($tokens[$returnPtr]['level'] === 2) {
+                    $nextPtr = $phpcsFile->findNext(T_WHITESPACE, $returnPtr + 1, $end, true);
+                    if ($tokens[$nextPtr]['code'] !== T_SEMICOLON) {
+                        $hasReturnValue = true;
+                    }
+                }
+                $start = $returnPtr + 1;
+            } else {
+                $doFind = false;
+            }
+        }
+
+        if ($return !== null) {
+            if ($hasReturnValue) {
+                $content = $tokens[($return + 2)]['content'];
+                if (empty($content) === true || $tokens[($return + 2)]['code'] !== T_DOC_COMMENT_STRING) {
+                    $error = 'Return type missing for @return tag in function comment';
+                    $phpcsFile->addError($error, $return, 'MissingReturnType');
+                }
+            } else {
+                $phpcsFile->addError(
+                    'ommit @return tag if the method does not return anything',
+                    $return,
+                    'OmmitReturn'
+                );
+            }
+        } else {
+            if ($hasReturnValue) {
+                $error = 'Missing @return tag in function comment';
+                $phpcsFile->addError($error, $tokens[$commentStart]['comment_closer'], 'MissingReturn');
+            }
+        }//end if
 
     } /* end processReturn() */
 
@@ -136,19 +163,21 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
     /**
      * Process the function parameter comments.
      *
-     * @param int $commentStart The position in the stack where
-     *                          the comment started.
+     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
+     * @param int                  $stackPtr     The position of the current token
+     *                                           in the stack passed in $tokens.
+     * @param int                  $commentStart The position in the stack where the comment started.
      *
      * @return void
      */
-    protected function processParams($commentStart)
-    {
-        if ($this->isInheritDoc()) {
-            return;
-        }
-
-        parent::processParams($commentStart);
-    } // end processParams()
+//    protected function processParams(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $commentStart)
+//    {
+//        if ($this->isInheritDoc()) {
+//            return;
+//        }
+//
+//        parent::processParams($phpcsFile, $stackPtr, $commentStart);
+//    } // end processParams()
 
     /**
      * Is the return statement matching?

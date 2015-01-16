@@ -44,8 +44,8 @@ class Symfony_Tests_Commenting_FunctionCommentUnitTest extends AbstractSniffUnit
         case 'FunctionCommentUnitTest.fail.inc':
             return array(
                 5  => 1,
-                11 => 3,
-                12 => 1,
+                10 => 1,
+                11 => 1,
                 20 => 1,
                 29 => 1,
                 37 => 1,

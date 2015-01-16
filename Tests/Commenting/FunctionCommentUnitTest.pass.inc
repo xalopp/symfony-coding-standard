@@ -108,4 +108,12 @@ class Pass
             array(1, 2, 3)
         );
     }
+
+    /**
+     * @{@inheritdoc}
+     */
+    public function inheritedStuff()
+    {
+        return [];
+    }
 }

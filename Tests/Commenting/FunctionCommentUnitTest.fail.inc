@@ -50,7 +50,7 @@ class Fail
     /**
      * missing
      */
-    public function arrayStuff2()
+    public function arrayStuff3()
     {
         return array_map(
             function ($v) {
