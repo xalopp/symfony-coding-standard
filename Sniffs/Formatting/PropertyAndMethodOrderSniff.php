@@ -37,28 +37,36 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
     public $supportedTokenizers = array('PHP');
 
     /**
+     * Current file name
+     *
      * @var string
      */
     private $_currentFilename = null;
 
     /**
+     * Function found flag
+     *
      * @var bool
      */
     private $_functionFound = false;
 
     /**
+     * Function end pointer
+     *
      * @var int
      */
     private $_functionEnd = -1;
 
     /**
-     * should be public, protected, private or null
+     * Should be public, protected, private or null
      *
      * @var string
      */
     private $_lowestFunctionVisibility = null;
 
     /**
+     * Allowed visibilities and order
+     *
      * @var array
      */
     private $_allowedVisibilities = array(
