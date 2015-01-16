@@ -24,6 +24,8 @@ Yet, this ruleset relies on CodeSniffer PSR-1 & 2 sniffs and adds Symfony standa
 
         cd /path/to/pear/PHP/CodeSniffer/Standards
         git clone git://github.com/xalopp/symfony-coding-standard.git Symfony
+        
+   PHPCS 1.5 user must use the "1.5" branch!
 
 4. Select the Symfony ruleset as your default coding standard:
 
