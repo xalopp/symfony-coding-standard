@@ -103,6 +103,10 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
             }
         }
 
+        if (!isset($tokens[$stackPtr]['scope_opener'])) {
+            // abstract method
+            return;
+        }
         $start     = $tokens[$stackPtr]['scope_opener'] + 1;
         $end       = $tokens[$stackPtr]['scope_closer'] - 1;
 
@@ -147,34 +151,4 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         }//end if
 
     } /* end processReturn() */
-
-    /**
-     * Is the comment an inheritdoc?
-     *
-     * @return boolean True if the comment is an inheritdoc
-     */
-    protected function isInheritDoc ()
-    {
-        $content = $this->commentParser->getComment()->getContent();
-
-        return preg_match('#{@inheritdoc}#i', $content) === 1;
-    } // end isInheritDoc()
-
-    /**
-     * Is the return statement matching?
-     *
-     * @param array $tokens    Array of tokens
-     * @param int   $returnPos Stack position of the T_RETURN token to process
-     *
-     * @return boolean True if the return does not return anything
-     */
-    protected function isMatchingReturn ($tokens, $returnPos)
-    {
-        do {
-            $returnPos++;
-        } while ($tokens[$returnPos]['code'] === T_WHITESPACE);
-
-        return $tokens[$returnPos]['code'] !== T_SEMICOLON;
-    }
-
 }//end class

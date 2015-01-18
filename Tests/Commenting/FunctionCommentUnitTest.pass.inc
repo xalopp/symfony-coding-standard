@@ -116,4 +116,9 @@ class Pass
     {
         return [];
     }
+
+    /**
+     * @return Stuff
+     */
+    abstract public function absFunc();
 }
