@@ -117,7 +117,16 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
             $returnPtr = $phpcsFile->findNext(T_RETURN, $start, $end);
             if ($returnPtr !== false) {
                 // ignore nested functions / closures
-                if ($tokens[$returnPtr]['level'] === 2) {
+                $countClosure = count(
+                    array_filter(
+                        $tokens[$returnPtr]['conditions'],
+                        function ($type) {
+                            return ($type === T_CLOSURE);
+                        }
+                    )
+                );
+
+                if ($countClosure === 0) {
                     $nextPtr = $phpcsFile->findNext(T_WHITESPACE, $returnPtr + 1, $end, true);
                     if ($tokens[$nextPtr]['code'] !== T_SEMICOLON) {
                         $hasReturnValue = true;

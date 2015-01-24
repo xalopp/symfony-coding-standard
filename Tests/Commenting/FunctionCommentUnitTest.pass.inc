@@ -121,4 +121,24 @@ class Pass
      * @return Stuff
      */
     abstract public function absFunc();
+
+    /**
+     * ok
+     *
+     * @param int $i integer
+     *
+     * @return string
+     */
+    public function complexRet($i)
+    {
+        if ($i === 0) {
+            return "neutrum";
+        } else {
+            if ($i > 0) {
+                return "positive";
+            } else {
+                return "negative";
+            }
+        }
+    }
 }
