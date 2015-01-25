@@ -139,7 +139,7 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
      */
     protected function processPackage(PHP_CodeSniffer_File $phpcsFile, array $tags)
     {
-        $phpcsFile->addError('the @package annotation is not used', $tags[0], 'InvalidPackage');
+        $this->_addErrorAndFix($phpcsFile, $tags[0], 'InvalidPackage');
     }
 
     /**
@@ -150,8 +150,63 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
      *
      * @return void
      */
-    protected function processSubPackage(PHP_CodeSniffer_File $phpcsFile, array $tags)
+    protected function processSubPackage(
+        PHP_CodeSniffer_File $phpcsFile,
+        array $tags
+    ) {
+        $this->_addErrorAndFix($phpcsFile, $tags[0], 'InvalidSubpackage');
+    }
+
+    /**
+     * Process the package tag.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  pointer to the line to be deleted.
+     * @param string               $code      code for addError()
+     *
+     * @return void
+     */
+    private function _addErrorAndFix(
+        PHP_CodeSniffer_File $phpcsFile,
+        $stackPtr,
+        $code = ''
+    ) {
+        $tokens = $phpcsFile->getTokens();
+        $name   = $tokens[$stackPtr]['content'];
+
+        $fix = $phpcsFile->addFixableError(
+            "the {$name} annotation is not used",
+            $stackPtr,
+            $code
+        );
+
+        if ($fix) {
+            $this->_deleteLine($phpcsFile, $stackPtr);
+        }
+    }
+
+    /**
+     * Fix a line by deleting it
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  pointer to the line to be deleted.
+     *
+     * @return void
+     */
+    private function _deleteLine(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $phpcsFile->addError('the @subpackage annotation is not used', $tags[0], 'InvalidSubpackage');
+        $tokens = $phpcsFile->getTokens();
+        $line   = $tokens[$stackPtr]['line'];
+
+        $phpcsFile->fixer->beginChangeset();
+
+        for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i--) {
+            $phpcsFile->fixer->replaceToken($i, '');
+        }
+        for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i++) {
+            $phpcsFile->fixer->replaceToken($i, '');
+        }
+
+        $phpcsFile->fixer->endChangeset();
     }
 }
