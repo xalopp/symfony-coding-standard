@@ -92,7 +92,16 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
             if ($tokens[$tag]['content'] === '@return') {
                 if ($return !== null) {
                     $error = 'Only 1 @return tag is allowed in a function comment';
-                    $phpcsFile->addError($error, $tag, 'DuplicateReturn');
+                    $fix   = $phpcsFile->addFixableError(
+                        $error,
+                        $tag,
+                        'DuplicateReturn'
+                    );
+
+                    if ($fix) {
+                        $this->_deleteLine($phpcsFile, $tag);
+                    }
+
                     return;
                 }
 
@@ -146,11 +155,15 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
                     $phpcsFile->addError($error, $return, 'MissingReturnType');
                 }
             } else {
-                $phpcsFile->addError(
+                $fix = $phpcsFile->addFixableError(
                     'ommit @return tag if the method does not return anything',
                     $return,
                     'OmmitReturn'
                 );
+
+                if ($fix) {
+                    $this->_deleteLine($phpcsFile, $return);
+                }
             }
         } else {
             if ($hasReturnValue) {
@@ -160,4 +173,30 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         }//end if
 
     } /* end processReturn() */
+
+    /**
+     * Fix a line by deleting it
+     * TODO needs to be refactored, copy of ClassCommentSniff
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  pointer to the line to be deleted.
+     *
+     * @return void
+     */
+    private function _deleteLine(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
+        $line   = $tokens[$stackPtr]['line'];
+
+        $phpcsFile->fixer->beginChangeset();
+
+        for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i--) {
+            $phpcsFile->fixer->replaceToken($i, '');
+        }
+        for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i++) {
+            $phpcsFile->fixer->replaceToken($i, '');
+        }
+
+        $phpcsFile->fixer->endChangeset();
+    }
 }//end class

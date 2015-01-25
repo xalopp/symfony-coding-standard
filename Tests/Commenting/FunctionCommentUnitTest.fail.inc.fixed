@@ -26,7 +26,6 @@ class Fail
     /**
      * does bar and foo
      *
-     * @return void
      */
     public function barfoo()
     {
@@ -63,7 +62,6 @@ class Fail
     /**
      * @return bool
      *
-     * @return bool
      */
     public function doubleReturnInDocBlock()
     {
