@@ -58,10 +58,16 @@ class Symfony_Sniffs_Formatting_ClassInstantiationSniff implements PHP_CodeSniff
         $next =  $phpcsFile->findNext($allowedTokens, $stackPtr + 1, null, true);
 
         if (($next === false) || ($tokens[$next]['type'] !== 'T_OPEN_PARENTHESIS')) {
-            $phpcsFile->addError(
+            $fix = $phpcsFile->addFixableError(
                 'parenthesis missing after class name',
                 $stackPtr
             );
+
+            if ($fix) {
+                $phpcsFile->fixer->beginChangeset();
+                $phpcsFile->fixer->addContentBefore($next, '()');
+                $phpcsFile->fixer->endChangeset();
+            }
         }
     }
 }
