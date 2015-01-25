@@ -60,13 +60,13 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
         $tokens       = $phpcsFile->getTokens();
         $nextToken    = $tokens[$stackPtr + 1]; // todo add boundary check
 
-        if ($nextToken['type'] === 'T_WHITESPACE'
+        if ($nextToken['code'] === T_WHITESPACE
             && substr($nextToken['content'], 0, 1) === "\n"
         ) {
             return;
         }
 
-        if ($nextToken['type'] === 'T_WHITESPACE'
+        if ($nextToken['code'] === T_WHITESPACE
             && $nextToken['content'] === " "
         ) {
             return;
@@ -79,14 +79,42 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
             return;
         }
 
-        if ($nextToken['type'] === 'T_COMMENT') {
+        if ($nextToken['code'] === T_COMMENT) {
             return;
         }
 
-        $phpcsFile->addError(
+        if ($nextToken['code'] === T_CLOSE_SHORT_ARRAY) {
+            return;
+        }
+
+        if ($nextToken['code'] === T_CLOSE_PARENTHESIS
+            && $tokens[$nextToken['parenthesis_owner']]['code'] == T_ARRAY
+        ) {
+            return;
+        }
+
+        $fix = $phpcsFile->addFixableError(
             'single space after each comma delimiter',
-            $stackPtr + 1
+            $stackPtr + 1,
+            'SingeSpaceAfterCommaRequired'
         );
+        if ($fix) {
+            if ($nextToken['code'] === T_WHITESPACE) {
+                if (strpos($nextToken['content'], "\n") !== false) {
+                    $phpcsFile->fixer->beginChangeset();
+                    $phpcsFile->fixer->replaceToken($stackPtr + 1, "\n");
+                    $phpcsFile->fixer->endChangeset();
+                } elseif ($nextToken['content'] !== " ") {
+                    $phpcsFile->fixer->beginChangeset();
+                    $phpcsFile->fixer->replaceToken($stackPtr + 1, " ");
+                    $phpcsFile->fixer->endChangeset();
+                }
+            } elseif ($nextToken['code'] !== T_WHITESPACE) {
+                $phpcsFile->fixer->beginChangeset();
+                $phpcsFile->fixer->addContentBefore($stackPtr + 1, " ");
+                $phpcsFile->fixer->endChangeset();
+            }
+        }
 
         return;
     }
