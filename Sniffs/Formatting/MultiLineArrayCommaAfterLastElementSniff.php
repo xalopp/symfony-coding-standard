@@ -73,22 +73,25 @@ class Symfony_Sniffs_Formatting_MultiLineArrayCommaAfterLastElementSniff impleme
             return;
         }
 
-        for ($i = $arrayEnd - 1; $i > $arrayStart; $i--) {
-            if ($tokens[$i]['type'] !== 'T_WHITESPACE'
-                && $tokens[$i]['type'] !== 'T_COMMENT'
-            ) {
-                if ($tokens[$i]['type'] !== 'T_COMMA') {
-                    $phpcsFile->addError(
-                        'Comma missing after last array item',
-                        $i,
-                        'CommaMissing'
-                    );
-                }
+        $prev = $phpcsFile->findPrevious(
+            array(T_WHITESPACE, T_COMMENT),
+            $arrayEnd - 1,
+            $arrayStart + 1,
+            true
+        );
 
-                return;
+        if (($prev !== false) && ($tokens[$prev]['code'] !== T_COMMA)) {
+            $fix = $phpcsFile->addFixableError(
+                'Comma missing after last array item',
+                $prev,
+                'CommaMissing'
+            );
+
+            if ($fix) {
+                $phpcsFile->fixer->beginChangeset();
+                $phpcsFile->fixer->addContent($prev, ',');
+                $phpcsFile->fixer->endChangeset();
             }
         }
-
-        return;
     }
 }

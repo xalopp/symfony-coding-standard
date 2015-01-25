@@ -22,7 +22,7 @@
  * @package   PHP_CodeSniffer
  * @author    Xaver Loppenstedt <xaver@loppenstedt.de>
  * @author    Steffen Ritter <steffenritter1@gmail.com>
- * @copyright 2013 Xaver Loppenstedt, some rights reserved.
+ * @copyright 2013-2015 Xaver Loppenstedt, some rights reserved.
  * @license   http://spdx.org/licenses/MIT MIT License
  * @link      http://symfony.com/doc/current/contributing/code/standards.html
  */
