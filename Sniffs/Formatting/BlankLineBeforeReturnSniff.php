@@ -8,6 +8,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer-Symfony2
  * @author   Symfony2-phpcs-authors <Symfony2-coding-standard@opensky.github.com>
+ * @author   Xaver Loppenstedt <xaver@loppenstedt.de>
  * @license  http://spdx.org/licenses/MIT MIT License
  * @version  GIT: master
  * @link     https://github.com/opensky/Symfony2-coding-standard
@@ -23,6 +24,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer-Symfony2
  * @author   Dave Hauenstein <davehauenstein@gmail.com>
+ * @author   Xaver Loppenstedt <xaver@loppenstedt.de>
  * @license  http://spdx.org/licenses/MIT MIT License
  * @link     https://github.com/opensky/Symfony2-coding-standard
  */
@@ -80,10 +82,15 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
         ) {
             return;
         } else if (count($prevLineTokens) > 0) {
-            $phpcsFile->addError(
+            $fix = $phpcsFile->addFixableError(
                 'Missing blank line before return statement',
                 $stackPtr
             );
+
+            if ($fix) {
+                $first = $phpcsFile->findFirstOnLine(T_RETURN, $stackPtr, true);
+                $phpcsFile->fixer->addNewlineBefore($first);
+            }
         }
 
         return;
