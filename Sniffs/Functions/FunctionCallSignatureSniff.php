@@ -7,6 +7,7 @@
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Ludovic Fleury <ludo.fleury@gmail.com>
+ * @author   Xaver Loppenstedt <xaver@loppenstedt.de>
  * @license  MIT License
  * @link     https://github.com/ludofleury/Symfony-coding-standard
  */
@@ -24,6 +25,7 @@ if (class_exists('PEAR_Sniffs_Functions_FunctionCallSignatureSniff', true) === f
  * @category PHP
  * @package  PHP_CodeSniffer
  * @author   Ludovic Fleury <ludo.fleury@gmail.com>
+ * @author   Xaver Loppenstedt <xaver@loppenstedt.de>
  * @license  MIT License
  * @link     https://github.com/ludofleury/Symfony2-coding-standard
  */
@@ -82,9 +84,17 @@ class Symfony_Sniffs_Functions_FunctionCallSignatureSniff extends PEAR_Sniffs_Fu
 
         $next = $phpcsFile->findNext(T_WHITESPACE, ($closeBracket + 1), null, true);
         if ($tokens[$next]['code'] === T_SEMICOLON) {
-            if (in_array($tokens[($closeBracket + 1)]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === true) {
+            if (isset(PHP_CodeSniffer_Tokens::$emptyTokens[$tokens[($closeBracket + 1)]['code']]) === true) {
                 $error = 'Space after closing parenthesis of function call prohibited';
-                $phpcsFile->addError($error, $closeBracket, 'SpaceAfterCloseBracket');
+                $fix   = $phpcsFile->addFixableError($error, $closeBracket, 'SpaceAfterCloseBracket');
+                if ($fix === true) {
+                    $phpcsFile->fixer->beginChangeset();
+                    for ($i = ($closeBracket + 1); $i < $next; $i++) {
+                        $phpcsFile->fixer->replaceToken($i, '');
+                    }
+
+                    $phpcsFile->fixer->endChangeset();
+                }
             }
         }
 
