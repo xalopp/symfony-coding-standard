@@ -1,47 +1,51 @@
 <?xml version="1.0"?>
 <ruleset name="Symfony">
- <description>The Symfony PSR-2 coding standard.</description>
+    <description>The Symfony PSR-2 coding standard.</description>
 
- <!-- There should not be any code in the bundle Resources directory. -->
- <exclude-pattern>*/Resources/*</exclude-pattern>
+    <!-- There should not be any code in the bundle Resources directory. -->
+    <exclude-pattern>*/Resources/*</exclude-pattern>
 
- <!-- 2. General -->
+    <!-- 2. General -->
 
- <!-- Include the whole PSR-2 standard -->
- <rule ref="PSR2">
-  <exclude name="PEAR.Functions.FunctionCallSignature"/>
- </rule>
+    <!-- Include the whole PSR-2 standard -->
+    <rule ref="PSR2">
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+    </rule>
 
-<rule ref="Symfony.Commenting.FunctionComment.MissingParamComment">
-<severity>0</severity>
-</rule>
+    <rule ref="Symfony.Commenting.FunctionComment.MissingParamComment">
+        <severity>0</severity>
+    </rule>
 
-<rule ref="Symfony.Commenting.FunctionComment.SpacingBeforeTags">
-    <severity>0</severity>
-</rule>
+    <rule ref="Symfony.Commenting.FunctionComment.SpacingBeforeTags">
+        <severity>0</severity>
+    </rule>
 
-<!-- Allow fluent interface style with the semi-colon on it's own line -->
- <rule ref="Symfony.Functions.FunctionCallSignature">
-  <properties>
-   <property name="allowMultipleArguments" value="false"/>
-  </properties>
- </rule>
+    <!-- Allow fluent interface style with the semi-colon on it's own line -->
+    <rule ref="Symfony.Functions.FunctionCallSignature">
+        <properties>
+            <property name="allowMultipleArguments" value="false"/>
+        </properties>
+    </rule>
 
- <!-- use squiz sniff for space around operators -->
- <rule ref="Squiz.WhiteSpace.OperatorSpacing"/>
+    <!-- use squiz sniff for space around operators -->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
 
- <!-- Variable must be camel case -->
- <rule ref="Zend.NamingConventions.ValidVariableName" />
+    <!-- Variable must be camel case -->
+    <rule ref="Zend.NamingConventions.ValidVariableName"/>
 
- <!-- Variable may contain numbers -->
- <rule ref="Zend.NamingConventions.ValidVariableName.ContainsNumbers">
-  <severity>0</severity>
- </rule>
+    <!-- Variable may contain numbers -->
+    <rule ref="Zend.NamingConventions.ValidVariableName.ContainsNumbers">
+        <severity>0</severity>
+    </rule>
 
- <!-- Private properties must not be prefixed with underscore -->
- <rule ref="Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore">
-  <severity>0</severity>
- </rule>
+    <!-- Private properties must not be prefixed with underscore -->
+    <rule ref="Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore">
+        <severity>0</severity>
+    </rule>
 
 </ruleset>
 
