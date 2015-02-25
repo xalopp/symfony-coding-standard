@@ -15,3 +15,5 @@ $e = new \Exception ('test');
 $e = new \Exception/* Bar  */('test', 0);
 $f = new \Exception();
 $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+$e = new $eName();
+$e = new $eName();
