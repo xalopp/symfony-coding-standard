@@ -1,4 +1,18 @@
 {
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "squizlabs/php_codesniffer",
+                "version": "master",
+                "source": {
+                    "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
     "name": "playbloom/php_codesniffer_symfony",
     "description": "PHP_CodeSniffer ruleset for Symfony PSR coding standards.",
     "type": "library",
@@ -25,5 +39,6 @@
     },
     "require": {
         "php": ">=5.4.0"
-    }
+    },
+    "minimum-stability": "dev"
 }
