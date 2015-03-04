@@ -2,6 +2,7 @@ language: php
 php:
   - 5.4
   - 5.5
+  - 5.6
 
 before_script:
   - composer install --dev
@@ -10,4 +11,5 @@ before_script:
   - cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/
 
 script:
+  - phpunit
   - ./vendor/squizlabs/php_codesniffer/scripts/phpcs ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs --standard=PEAR --report=summary -np
