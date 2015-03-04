@@ -11,5 +11,4 @@ before_script:
   - cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/
 
 script:
-  - phpunit
   - ./vendor/squizlabs/php_codesniffer/scripts/phpcs ./vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs --standard=PEAR --report=summary -np
