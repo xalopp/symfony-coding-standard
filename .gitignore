@@ -42,3 +42,6 @@ nb-configuration.xml
 *.tmproj
 *.tmproject
 tmtags
+
+# Editors
+*~

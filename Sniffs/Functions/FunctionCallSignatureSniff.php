@@ -31,6 +31,8 @@ if (class_exists('PEAR_Sniffs_Functions_FunctionCallSignatureSniff', true) === f
  */
 class Symfony_Sniffs_Functions_FunctionCallSignatureSniff extends PEAR_Sniffs_Functions_FunctionCallSignatureSniff
 {
+
+
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -66,10 +68,10 @@ class Symfony_Sniffs_Functions_FunctionCallSignatureSniff extends PEAR_Sniffs_Fu
             return;
         }
 
-        if ($tokens[$openBracket-1]['code'] === T_STRING && $tokens[$openBracket-2]['code'] === T_OBJECT_OPERATOR) {
+        if ($tokens[($openBracket - 1)]['code'] === T_STRING && $tokens[($openBracket - 2)]['code'] === T_OBJECT_OPERATOR) {
             $previous = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 3), null, true);
             if ($tokens[$previous]['code'] === T_CLOSE_PARENTHESIS) {
-                // It's a fluent interface chained call
+                // It's a fluent interface chained call.
                 return;
             }
         }
@@ -106,4 +108,6 @@ class Symfony_Sniffs_Functions_FunctionCallSignatureSniff extends PEAR_Sniffs_Fu
         }
 
     }//end process()
-}
+
+
+}//end class

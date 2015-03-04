@@ -70,27 +70,35 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
      * @var array
      */
     private $_allowedVisibilities = array(
-        'public'    => array('public', 'protected', 'private'),
-        'protected' => array('protected', 'private'),
-        'private'   => array('private'),
-    );
+                                     'public'    => array(
+                                                     'public',
+                                                     'protected',
+                                                     'private',
+                                                    ),
+                                     'protected' => array(
+                                                     'protected',
+                                                     'private',
+                                                    ),
+                                     'private'   => array('private'),
+                                    );
+
 
     /**
      * Constructs an AbstractVariableTest.
      */
     public function __construct()
     {
-        $scopes = array(
-            T_CLASS,
-        );
+        $scopes = array(T_CLASS);
 
         $listen = array(
-            T_FUNCTION,
-            T_VARIABLE,
-        );
+                   T_FUNCTION,
+                   T_VARIABLE,
+                  );
 
         parent::__construct($scopes, $listen, true);
-    }
+
+    }//end __construct()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -108,9 +116,9 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
         $currScope
     ) {
         if ($this->_currentFilename !== $phpcsFile->getFilename()) {
-            $this->_currentFilename = $phpcsFile->getFilename();
+            $this->_currentFilename          = $phpcsFile->getFilename();
             $this->_lowestFunctionVisibility = null;
-            $this->_functionEnd = -1;
+            $this->_functionEnd   = -1;
             $this->_functionFound = false;
         }
 
@@ -125,8 +133,8 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
 
         if ($currentToken['type'] === 'T_FUNCTION') {
             $this->_functionFound = true;
-            $methodProperties = $phpcsFile->getMethodProperties($stackPtr);
-            $visibility = $methodProperties['scope'];
+            $methodProperties     = $phpcsFile->getMethodProperties($stackPtr);
+            $visibility           = $methodProperties['scope'];
 
             if ($methodProperties['is_abstract'] === true) {
                 $this->_functionEnd = $phpcsFile->findNext(
@@ -142,7 +150,7 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
             } else {
                 $allowedVisibilities = $this->_allowedVisibilities[$this->_lowestFunctionVisibility];
 
-                if (!in_array($visibility, $allowedVisibilities)) {
+                if (false === in_array($visibility, $allowedVisibilities)) {
                     $phpcsFile->addError(
                         'Methods must me ordered public, protect, private',
                         $stackPtr
@@ -151,14 +159,16 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
                     $this->_lowestFunctionVisibility = $visibility;
                 }
             }
-        } elseif ($currentToken['type'] === 'T_VARIABLE' && $this->_functionFound) {
+        } else if ($currentToken['type'] === 'T_VARIABLE' && $this->_functionFound === true) {
             $phpcsFile->addError(
                 'class properties must be declared before methods',
                 $stackPtr
             );
-
-        }
+        }//end if
 
         return;
-    }
-}
+
+    }//end processTokenWithinScope()
+
+
+}//end class

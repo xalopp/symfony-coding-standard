@@ -29,9 +29,8 @@ class Symfony_Sniffs_NamingConventions_AbstractPrefixSniff implements PHP_CodeSn
      *
      * @var array
      */
-    public $supportedTokenizers = array(
-        'PHP',
-    );
+    public $supportedTokenizers = array('PHP');
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -41,7 +40,9 @@ class Symfony_Sniffs_NamingConventions_AbstractPrefixSniff implements PHP_CodeSn
     public function register()
     {
         return array(T_ABSTRACT);
-    }
+
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,16 +55,16 @@ class Symfony_Sniffs_NamingConventions_AbstractPrefixSniff implements PHP_CodeSn
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens   = $phpcsFile->getTokens();
-        $line     = $tokens[$stackPtr]['line'];
+        $tokens = $phpcsFile->getTokens();
+        $line   = $tokens[$stackPtr]['line'];
 
         $foundClassToken = false;
 
-        while ($tokens[$stackPtr]['line'] == $line) {
-            if ('T_CLASS' == $tokens[$stackPtr]['type']) {
+        while ($tokens[$stackPtr]['line'] === $line) {
+            if ('T_CLASS' === $tokens[$stackPtr]['type']) {
                 $foundClassToken = true;
-            } elseif ('T_STRING' == $tokens[$stackPtr]['type']) {
-                if ($foundClassToken
+            } else if ('T_STRING' === $tokens[$stackPtr]['type']) {
+                if ($foundClassToken === true
                     && strpos($tokens[$stackPtr]['content'], 'Abstract') !== 0
                 ) {
                     $phpcsFile->addError(
@@ -71,11 +72,16 @@ class Symfony_Sniffs_NamingConventions_AbstractPrefixSniff implements PHP_CodeSn
                         $stackPtr
                     );
                 }
+
                 break;
             }
+
             $stackPtr++;
         }
 
         return;
-    }
-}
+
+    }//end process()
+
+
+}//end class

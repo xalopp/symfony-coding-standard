@@ -28,6 +28,8 @@
  */
 class Symfony_Sniffs_Formatting_ClassInstantiationSniff implements PHP_CodeSniffer_Sniff
 {
+
+
     /**
      * Registers the token types that this sniff wishes to listen to.
      *
@@ -36,7 +38,9 @@ class Symfony_Sniffs_Formatting_ClassInstantiationSniff implements PHP_CodeSniff
     public function register()
     {
         return array(T_NEW);
-    }
+
+    }//end register()
+
 
     /**
      * Process the tokens that this sniff is listening for.
@@ -56,7 +60,7 @@ class Symfony_Sniffs_Formatting_ClassInstantiationSniff implements PHP_CodeSniff
         $allowedTokens[] = T_NS_SEPARATOR;
         $allowedTokens[] = T_VARIABLE;
 
-        $next =  $phpcsFile->findNext($allowedTokens, $stackPtr + 1, null, true);
+        $next = $phpcsFile->findNext($allowedTokens, ($stackPtr + 1), null, true);
 
         if (($next === false) || ($tokens[$next]['type'] !== 'T_OPEN_PARENTHESIS')) {
             $fix = $phpcsFile->addFixableError(
@@ -64,11 +68,14 @@ class Symfony_Sniffs_Formatting_ClassInstantiationSniff implements PHP_CodeSniff
                 $stackPtr
             );
 
-            if ($fix) {
+            if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->addContentBefore($next, '()');
                 $phpcsFile->fixer->endChangeset();
             }
         }
-    }
-}
+
+    }//end process()
+
+
+}//end class

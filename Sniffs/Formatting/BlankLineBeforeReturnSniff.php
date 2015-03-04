@@ -36,9 +36,10 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
      * @var array
      */
     public $supportedTokenizers = array(
-        'PHP',
-        'JS',
-    );
+                                   'PHP',
+                                   'JS',
+                                  );
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -48,7 +49,9 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
     public function register()
     {
         return array(T_RETURN);
-    }
+
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,22 +64,23 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens          = $phpcsFile->getTokens();
-        $current         = $stackPtr;
-        $previousLine    = $tokens[$stackPtr]['line'] - 1;
-        $prevLineTokens  = array();
+        $tokens         = $phpcsFile->getTokens();
+        $current        = $stackPtr;
+        $previousLine   = ($tokens[$stackPtr]['line'] - 1);
+        $prevLineTokens = array();
 
         while ($current >= 0 && $tokens[$current]['line'] >= $previousLine) {
-            if ($tokens[$current]['line'] == $previousLine
+            if ($tokens[$current]['line'] === $previousLine
                 && $tokens[$current]['type'] !== 'T_WHITESPACE'
                 && $tokens[$current]['type'] !== 'T_COMMENT'
             ) {
                 $prevLineTokens[] = $tokens[$current]['type'];
             }
+
             $current--;
         }
 
-        if (isset($prevLineTokens[0])
+        if (isset($prevLineTokens[0] === true)
             && ($prevLineTokens[0] === 'T_OPEN_CURLY_BRACKET'
             || $prevLineTokens[0] === 'T_COLON')
         ) {
@@ -87,12 +91,15 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
                 $stackPtr
             );
 
-            if ($fix) {
+            if ($fix === true) {
                 $first = $phpcsFile->findFirstOnLine(T_RETURN, $stackPtr, true);
                 $phpcsFile->fixer->addNewlineBefore($first);
             }
         }
 
         return;
-    }
-}
+
+    }//end process()
+
+
+}//end class
