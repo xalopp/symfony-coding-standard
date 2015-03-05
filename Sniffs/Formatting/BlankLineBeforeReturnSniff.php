@@ -80,7 +80,7 @@ class Symfony_Sniffs_Formatting_BlankLineBeforeReturnSniff implements PHP_CodeSn
             $current--;
         }
 
-        if (isset($prevLineTokens[0] === true)
+        if (isset($prevLineTokens[0]) === true
             && ($prevLineTokens[0] === 'T_OPEN_CURLY_BRACKET'
             || $prevLineTokens[0] === 'T_COLON')
         ) {
