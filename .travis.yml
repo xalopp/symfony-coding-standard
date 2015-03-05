@@ -11,6 +11,7 @@ before_script:
   - mkdir -p vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
   - cp -R Sniffs/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs/
   - cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/
+  - cp ruleset.xml vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
 
 script:
   - (cd vendor/squizlabs/php_codesniffer ; phpunit --filter Symfony_)
