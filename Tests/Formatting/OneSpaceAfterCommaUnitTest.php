@@ -28,6 +28,8 @@
  */
 class Symfony_Tests_Formatting_OneSpaceAfterCommaUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -45,17 +47,19 @@ class Symfony_Tests_Formatting_OneSpaceAfterCommaUnitTest extends AbstractSniffU
             return array();
         case 'OneSpaceAfterCommaUnitTest.2.inc':
             return array(
-                3  => 1,
-                5  => 2,
-                7  => 2,
-                10 => 1,
-                14 => 2,
-                17 => 1,
-            );
+                    3  => 1,
+                    5  => 2,
+                    7  => 2,
+                    10 => 1,
+                    14 => 2,
+                    17 => 1,
+                   );
         }
 
         return null;
-    }
+
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -68,5 +72,8 @@ class Symfony_Tests_Formatting_OneSpaceAfterCommaUnitTest extends AbstractSniffU
     public function getWarningList()
     {
         return array();
-    }
-}
+
+    }//end getWarningList()
+
+
+}//end class

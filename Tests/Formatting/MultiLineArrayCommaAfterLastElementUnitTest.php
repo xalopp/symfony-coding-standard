@@ -28,6 +28,8 @@
  */
 class Symfony_Tests_Formatting_MultiLineArrayCommaAfterLastElementUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -46,21 +48,23 @@ class Symfony_Tests_Formatting_MultiLineArrayCommaAfterLastElementUnitTest exten
         case 'MultiLineArrayCommaAfterLastElementUnitTest.2.inc':
         case 'MultiLineArrayCommaAfterLastElementUnitTest.3.inc':
             return array(
-                7  => 1,
-                12 => 1,
-                17 => 1,
-                21 => 1,
-                25 => 1,
-                28 => 1,
-                32 => 1,
-                35 => 1,
-                42 => 1,
-                47 => 1,
-            );
+                    7  => 1,
+                    12 => 1,
+                    17 => 1,
+                    21 => 1,
+                    25 => 1,
+                    28 => 1,
+                    32 => 1,
+                    35 => 1,
+                    42 => 1,
+                    47 => 1,
+                   );
         }
 
         return null;
-    }
+
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -73,5 +77,8 @@ class Symfony_Tests_Formatting_MultiLineArrayCommaAfterLastElementUnitTest exten
     public function getWarningList()
     {
         return array();
-    }
-}
+
+    }//end getWarningList()
+
+
+}//end class

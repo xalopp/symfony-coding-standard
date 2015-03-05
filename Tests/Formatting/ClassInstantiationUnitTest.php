@@ -28,6 +28,8 @@
  */
 class Symfony_Tests_Formatting_ClassInstantiationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -40,14 +42,16 @@ class Symfony_Tests_Formatting_ClassInstantiationUnitTest extends AbstractSniffU
     {
 
         return array(
-            6  => 1,
-            10 => 1,
-            11 => 1,
-            12 => 1,
-            16 => 1,
-            18 => 1,
-        );
-    }
+                6  => 1,
+                10 => 1,
+                11 => 1,
+                12 => 1,
+                16 => 1,
+                18 => 1,
+               );
+
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -60,5 +64,8 @@ class Symfony_Tests_Formatting_ClassInstantiationUnitTest extends AbstractSniffU
     protected function getWarningList()
     {
         return array();
-    }
-}
+
+    }//end getWarningList()
+
+
+}//end class

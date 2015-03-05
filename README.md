@@ -60,17 +60,17 @@ Yet, this ruleset relies on CodeSniffer PSR-1 & 2 sniffs and adds Symfony standa
 
 ## Contributing
 
-If you do contribute code to these sniffs, please make sure it conforms to the PEAR coding standard and that the unit tests still pass.
+If you do contribute code to these sniffs, please make sure it conforms to the PHPCS coding standard and that the unit tests still pass.
 
 To check the coding standard, run from the Symfony-coding-standard source root:
 
-        phpcs --ignore=Tests --standard=PEAR . -n
+        phpcs --ignore=Tests --standard=PHPCS . -n
 
 The unit-tests are run from within the PHP_CodeSniffer directory
 
 * get the [CodeSniffer repository](https://github.com/squizlabs/PHP_CodeSniffer)
 * symlink, copy or clone this repository at CodeSniffer/Standard/Symfony
-* from the CodeSniffer repository root run `phpunit --filter Symfony_ tests/AllTests.php`
+* from the CodeSniffer repository root run `phpunit --filter Symfony_`
 
 ## Credit
 

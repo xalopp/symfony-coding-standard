@@ -29,6 +29,8 @@
  */
 class Symfony_Tests_Formatting_ExceptionMessageStringUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -40,7 +42,9 @@ class Symfony_Tests_Formatting_ExceptionMessageStringUnitTest extends AbstractSn
     protected function getErrorList()
     {
         return array();
-    }
+
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -53,11 +57,14 @@ class Symfony_Tests_Formatting_ExceptionMessageStringUnitTest extends AbstractSn
     protected function getWarningList()
     {
         return array(
-            6  => 1,
-            7  => 1,
-            8  => 1,
-            9  => 1,
-            28 => 1,
-        );
-    }
-}
+                6  => 1,
+                7  => 1,
+                8  => 1,
+                9  => 1,
+                28 => 1,
+               );
+
+    }//end getWarningList()
+
+
+}//end class

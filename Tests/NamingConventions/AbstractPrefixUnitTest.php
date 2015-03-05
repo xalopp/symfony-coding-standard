@@ -25,25 +25,28 @@
  */
 class Symfony_Tests_NamingConventions_AbstractPrefixUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
      * The key of the array should represent the line number and the value
      * should represent the number of errors that should occur on that line.
      *
-     * @return array(int => int)
+     * @param string $testFile test file
+     *
+     * @return array
      */
     public function getErrorList($testFile='')
     {
         if ($testFile === 'AbstractPrefixUnitTest.1.inc') {
-            return array(
-                3 => 1,
-            );
+            return array(3 => 1);
         } else {
             return array();
         }
 
-    }
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -56,5 +59,8 @@ class Symfony_Tests_NamingConventions_AbstractPrefixUnitTest extends AbstractSni
     public function getWarningList()
     {
         return array();
-    }
-}
+
+    }//end getWarningList()
+
+
+}//end class

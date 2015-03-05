@@ -26,6 +26,8 @@
  */
 class Symfony_Tests_Commenting_FunctionCommentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -43,19 +45,21 @@ class Symfony_Tests_Commenting_FunctionCommentUnitTest extends AbstractSniffUnit
             return array();
         case 'FunctionCommentUnitTest.fail.inc':
             return array(
-                5  => 1,
-                10 => 1,
-                11 => 1,
-                20 => 1,
-                29 => 1,
-                37 => 1,
-                52 => 1,
-                66 => 1,
-            );
+                    5  => 1,
+                    10 => 1,
+                    11 => 1,
+                    20 => 1,
+                    29 => 1,
+                    37 => 1,
+                    52 => 1,
+                    66 => 1,
+                   );
         }
 
         return null;
-    }
+
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -68,5 +72,8 @@ class Symfony_Tests_Commenting_FunctionCommentUnitTest extends AbstractSniffUnit
     public function getWarningList()
     {
         return array();
-    }
-}
+
+    }//end getWarningList()
+
+
+}//end class

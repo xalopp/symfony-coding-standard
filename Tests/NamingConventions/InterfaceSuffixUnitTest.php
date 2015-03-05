@@ -25,6 +25,8 @@
  */
 class Symfony_Tests_NamingConventions_InterfaceSuffixUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -35,11 +37,10 @@ class Symfony_Tests_NamingConventions_InterfaceSuffixUnitTest extends AbstractSn
      */
     public function getErrorList()
     {
-        return array(
-            3 => 1,
-        );
+        return array(3 => 1);
 
-    }
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -53,5 +54,7 @@ class Symfony_Tests_NamingConventions_InterfaceSuffixUnitTest extends AbstractSn
     {
         return array();
 
-    }
-}
+    }//end getWarningList()
+
+
+}//end class

@@ -27,6 +27,8 @@
  */
 class Symfony_Tests_Formatting_BlankLineBeforeReturnUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -37,11 +39,10 @@ class Symfony_Tests_Formatting_BlankLineBeforeReturnUnitTest extends AbstractSni
      */
     public function getErrorList()
     {
-        return array(
-            23 => 1,
-        );
+        return array(23 => 1);
 
-    }
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -55,5 +56,7 @@ class Symfony_Tests_Formatting_BlankLineBeforeReturnUnitTest extends AbstractSni
     {
         return array();
 
-    }
-}
+    }//end getWarningList()
+
+
+}//end class
