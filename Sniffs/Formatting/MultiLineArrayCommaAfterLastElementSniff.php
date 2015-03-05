@@ -36,6 +36,7 @@ class Symfony_Sniffs_Formatting_MultiLineArrayCommaAfterLastElementSniff impleme
      */
     public $supportedTokenizers = array('PHP');
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -43,8 +44,13 @@ class Symfony_Sniffs_Formatting_MultiLineArrayCommaAfterLastElementSniff impleme
      */
     public function register()
     {
-        return array(T_ARRAY, T_OPEN_SHORT_ARRAY);
-    }
+        return array(
+                T_ARRAY,
+                T_OPEN_SHORT_ARRAY,
+               );
+
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -69,14 +75,17 @@ class Symfony_Sniffs_Formatting_MultiLineArrayCommaAfterLastElementSniff impleme
         }
 
         if ($tokens[$arrayStart]['line'] === $tokens[$arrayEnd]['line']) {
-            // single line
+            // Skip single line.
             return;
         }
 
         $prev = $phpcsFile->findPrevious(
-            array(T_WHITESPACE, T_COMMENT),
-            $arrayEnd - 1,
-            $arrayStart + 1,
+            array(
+             T_WHITESPACE,
+             T_COMMENT,
+            ),
+            ($arrayEnd - 1),
+            ($arrayStart + 1),
             true
         );
 
@@ -87,11 +96,14 @@ class Symfony_Sniffs_Formatting_MultiLineArrayCommaAfterLastElementSniff impleme
                 'CommaMissing'
             );
 
-            if ($fix) {
+            if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->addContent($prev, ',');
                 $phpcsFile->fixer->endChangeset();
             }
         }
-    }
-}
+
+    }//end process()
+
+
+}//end class

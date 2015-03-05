@@ -29,9 +29,8 @@ class Symfony_Sniffs_NamingConventions_ExceptionSuffixSniff implements PHP_CodeS
      *
      * @var array
      */
-    public $supportedTokenizers = array(
-        'PHP',
-    );
+    public $supportedTokenizers = array('PHP');
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -41,7 +40,9 @@ class Symfony_Sniffs_NamingConventions_ExceptionSuffixSniff implements PHP_CodeS
     public function register()
     {
         return array(T_EXTENDS);
-    }
+
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,19 +55,21 @@ class Symfony_Sniffs_NamingConventions_ExceptionSuffixSniff implements PHP_CodeS
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens   = $phpcsFile->getTokens();
-        $line     = $tokens[$stackPtr]['line'];
+        $tokens = $phpcsFile->getTokens();
+        $line   = $tokens[$stackPtr]['line'];
 
         $originalStackPtr = $stackPtr;
         $extendsException = false;
 
-        while ($tokens[$stackPtr]['line'] == $line) {
-            if ('T_STRING' == $tokens[$stackPtr]['type']) {
-                if (substr($tokens[$stackPtr]['content'], -9) == 'Exception') {
+        while ($tokens[$stackPtr]['line'] === $line) {
+            if ('T_STRING' === $tokens[$stackPtr]['type']) {
+                if (substr($tokens[$stackPtr]['content'], -9) === 'Exception') {
                     $extendsException = true;
                 }
+
                 break;
             }
+
             $stackPtr++;
         }
 
@@ -77,18 +80,23 @@ class Symfony_Sniffs_NamingConventions_ExceptionSuffixSniff implements PHP_CodeS
         $stackPtr = $originalStackPtr;
 
         while ($tokens[$stackPtr]['line'] == $line) {
-            if ('T_STRING' == $tokens[$stackPtr]['type']) {
-                if (substr($tokens[$stackPtr]['content'], -9) != 'Exception') {
+            if ('T_STRING' === $tokens[$stackPtr]['type']) {
+                if (substr($tokens[$stackPtr]['content'], -9) !== 'Exception') {
                      $phpcsFile->addError(
                          'Exception name is not suffixed with "Exception"',
                          $stackPtr
                      );
                 }
+
                 break;
             }
+
             $stackPtr--;
         }
 
         return;
-    }
-}
+
+    }//end process()
+
+
+}//end class

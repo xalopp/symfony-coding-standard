@@ -36,6 +36,7 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
      */
     public $supportedTokenizers = array('PHP');
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -44,7 +45,9 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
     public function register()
     {
         return array(T_COMMA);
-    }
+
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -57,9 +60,9 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens       = $phpcsFile->getTokens();
-        $nextToken    = $tokens[$stackPtr + 1]; // todo add boundary check
-
+        $tokens    = $phpcsFile->getTokens();
+        $nextToken = $tokens[($stackPtr + 1)];
+        // TODO add boundary check.
         if ($nextToken['code'] === T_WHITESPACE
             && substr($nextToken['content'], 0, 1) === "\n"
         ) {
@@ -72,9 +75,9 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
             return;
         }
 
-        // ignore white spaces before comments
+        // Ignore white spaces before comments.
         if ($nextToken['type'] === 'T_WHITESPACE'
-            && $tokens[$stackPtr + 2]['type'] === 'T_COMMENT'
+            && $tokens[($stackPtr + 2)]['type'] === 'T_COMMENT'
         ) {
             return;
         }
@@ -88,34 +91,37 @@ class Symfony_Sniffs_Formatting_OneSpaceAfterCommaSniff implements PHP_CodeSniff
         }
 
         if ($nextToken['code'] === T_CLOSE_PARENTHESIS
-            && $tokens[$nextToken['parenthesis_owner']]['code'] == T_ARRAY
+            && $tokens[$nextToken['parenthesis_owner']]['code'] === T_ARRAY
         ) {
             return;
         }
 
         $fix = $phpcsFile->addFixableError(
             'single space after each comma delimiter',
-            $stackPtr + 1,
+            ($stackPtr + 1),
             'SingeSpaceAfterCommaRequired'
         );
-        if ($fix) {
+        if ($fix === true) {
             if ($nextToken['code'] === T_WHITESPACE) {
                 if (strpos($nextToken['content'], "\n") !== false) {
                     $phpcsFile->fixer->beginChangeset();
-                    $phpcsFile->fixer->replaceToken($stackPtr + 1, "\n");
+                    $phpcsFile->fixer->replaceToken(($stackPtr + 1), "\n");
                     $phpcsFile->fixer->endChangeset();
-                } elseif ($nextToken['content'] !== " ") {
+                } else if ($nextToken['content'] !== " ") {
                     $phpcsFile->fixer->beginChangeset();
-                    $phpcsFile->fixer->replaceToken($stackPtr + 1, " ");
+                    $phpcsFile->fixer->replaceToken(($stackPtr + 1), " ");
                     $phpcsFile->fixer->endChangeset();
                 }
-            } elseif ($nextToken['code'] !== T_WHITESPACE) {
+            } else if ($nextToken['code'] !== T_WHITESPACE) {
                 $phpcsFile->fixer->beginChangeset();
-                $phpcsFile->fixer->addContentBefore($stackPtr + 1, " ");
+                $phpcsFile->fixer->addContentBefore(($stackPtr + 1), " ");
                 $phpcsFile->fixer->endChangeset();
             }
         }
 
         return;
-    }
-}
+
+    }//end process()
+
+
+}//end class

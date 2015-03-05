@@ -29,6 +29,8 @@
  */
 class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeSniffer_Sniff
 {
+
+
     /**
      * Registers the token types that this sniff wishes to listen to.
      *
@@ -37,7 +39,9 @@ class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeS
     public function register()
     {
         return array(T_NEW);
-    }
+
+    }//end register()
+
 
     /**
      * Process the tokens that this sniff is listening for.
@@ -56,7 +60,7 @@ class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeS
         $allowedTokens[] = T_STRING;
         $allowedTokens[] = T_NS_SEPARATOR;
 
-        $opener =  $phpcsFile->findNext($allowedTokens, $stackPtr + 1, null, true);
+        $opener = $phpcsFile->findNext($allowedTokens, ($stackPtr + 1), null, true);
 
         if ($opener === false
             || ($tokens[$opener]['type'] !== 'T_OPEN_PARENTHESIS')
@@ -66,12 +70,12 @@ class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeS
 
         $prev = $phpcsFile->findPrevious(
             PHP_CodeSniffer_Tokens::$emptyTokens,
-            $opener - 1,
+            ($opener - 1),
             null,
             true
         );
 
-        if ($prev === false ) {
+        if ($prev === false) {
             return;
         }
 
@@ -83,7 +87,7 @@ class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeS
 
         $closer = $tokens[$opener]['parenthesis_closer'];
 
-        $concat = $phpcsFile->findNext(T_STRING_CONCAT, $opener + 1, $closer, false);
+        $concat = $phpcsFile->findNext(T_STRING_CONCAT, ($opener + 1), $closer, false);
 
         if ($concat === false) {
             return;
@@ -93,5 +97,8 @@ class Symfony_Sniffs_Formatting_ExceptionMessageStringSniff implements PHP_CodeS
             'Use sprintf to concat exception message',
             $stackPtr
         );
-    }
-}
+
+    }//end process()
+
+
+}//end class

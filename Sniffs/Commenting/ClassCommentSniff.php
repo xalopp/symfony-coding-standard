@@ -47,51 +47,52 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
      * @var array
      */
     protected $tags = array(
-        '@category'   => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@package'    => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@subpackage' => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@author'     => array(
-            'required'       => false,
-            'allow_multiple' => true,
-        ),
-        '@copyright'  => array(
-            'required'       => false,
-            'allow_multiple' => true,
-        ),
-        '@license'    => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@version'    => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@link'       => array(
-            'required'       => false,
-            'allow_multiple' => true,
-        ),
-        '@see'        => array(
-            'required'       => false,
-            'allow_multiple' => true,
-        ),
-        '@since'      => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-        '@deprecated' => array(
-            'required'       => false,
-            'allow_multiple' => false,
-        ),
-    );
+                       '@category'   => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@package'    => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@subpackage' => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@author'     => array(
+                                         'required'       => false,
+                                         'allow_multiple' => true,
+                                        ),
+                       '@copyright'  => array(
+                                         'required'       => false,
+                                         'allow_multiple' => true,
+                                        ),
+                       '@license'    => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@version'    => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@link'       => array(
+                                         'required'       => false,
+                                         'allow_multiple' => true,
+                                        ),
+                       '@see'        => array(
+                                         'required'       => false,
+                                         'allow_multiple' => true,
+                                        ),
+                       '@since'      => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                       '@deprecated' => array(
+                                         'required'       => false,
+                                         'allow_multiple' => false,
+                                        ),
+                      );
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -104,7 +105,7 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $tokens    = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
 
         $find   = PHP_CodeSniffer_Tokens::$methodPrefixes;
         $find[] = T_WHITESPACE;
@@ -127,7 +128,9 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
 
         // Check each tag.
         $this->processTags($phpcsFile, $stackPtr, $tokens[$commentEnd]['comment_opener']);
-    }
+
+    }//end process()
+
 
     /**
      * Process the package tag.
@@ -140,7 +143,9 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
     protected function processPackage(PHP_CodeSniffer_File $phpcsFile, array $tags)
     {
         $this->_addErrorAndFix($phpcsFile, $tags[0], 'InvalidPackage');
-    }
+
+    }//end processPackage()
+
 
     /**
      * Process the package tag.
@@ -155,7 +160,9 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
         array $tags
     ) {
         $this->_addErrorAndFix($phpcsFile, $tags[0], 'InvalidSubpackage');
-    }
+
+    }//end processSubPackage()
+
 
     /**
      * Process the package tag.
@@ -180,10 +187,12 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
             $code
         );
 
-        if ($fix) {
+        if ($fix === true) {
             $this->_deleteLine($phpcsFile, $stackPtr);
         }
-    }
+
+    }//end _addErrorAndFix()
+
 
     /**
      * Fix a line by deleting it
@@ -203,10 +212,14 @@ class Symfony_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting
         for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i--) {
             $phpcsFile->fixer->replaceToken($i, '');
         }
+
         for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i++) {
             $phpcsFile->fixer->replaceToken($i, '');
         }
 
         $phpcsFile->fixer->endChangeset();
-    }
-}
+
+    }//end _deleteLine()
+
+
+}//end class

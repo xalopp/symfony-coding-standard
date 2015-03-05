@@ -34,6 +34,7 @@
 class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Commenting_FunctionCommentSniff
 {
 
+
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -50,20 +51,22 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         }
 
         $tokens = $phpcsFile->getTokens();
-        $code = $tokens[$commentEnd]['code'];
+        $code   = $tokens[$commentEnd]['code'];
 
-        // a comment is not required on protected/private methods
-        $method = $phpcsFile->getMethodProperties($stackPtr);
+        // A comment is not required on protected/private methods.
+        $method          = $phpcsFile->getMethodProperties($stackPtr);
         $commentRequired = 'public' == $method['scope'];
 
-        if (($code === T_COMMENT && !$commentRequired)
-            || ($code !== T_DOC_COMMENT && !$commentRequired)
+        if (($code === T_COMMENT && $commentRequired === false)
+            || ($code !== T_DOC_COMMENT && $commentRequired === false)
         ) {
             return;
         }
 
         parent::process($phpcsFile, $stackPtr);
-    }
+
+    }//end process()
+
 
     /**
      * Process the return comment of this function comment.
@@ -98,7 +101,7 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
                         'DuplicateReturn'
                     );
 
-                    if ($fix) {
+                    if ($fix === true) {
                         $this->_deleteLine($phpcsFile, $tag);
                     }
 
@@ -107,17 +110,19 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
 
                 $return = $tag;
             }
+
             if (preg_match('#{@inheritdoc}#i', $tokens[$tag]['content']) === 1) {
                 return;
             }
-        }
+        }//end foreach
 
-        if (!isset($tokens[$stackPtr]['scope_opener'])) {
-            // abstract method
+        if (false === isset($tokens[$stackPtr]['scope_opener'])) {
+            // Skip abstract methods.
             return;
         }
-        $start     = $tokens[$stackPtr]['scope_opener'] + 1;
-        $end       = $tokens[$stackPtr]['scope_closer'] - 1;
+
+        $start = ($tokens[$stackPtr]['scope_opener'] + 1);
+        $end   = ($tokens[$stackPtr]['scope_closer'] - 1);
 
         $hasReturnValue = false;
 
@@ -125,7 +130,7 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         while ($doFind) {
             $returnPtr = $phpcsFile->findNext(T_RETURN, $start, $end);
             if ($returnPtr !== false) {
-                // ignore nested functions / closures
+                // Ignore nested functions / closures.
                 $countClosure = count(
                     array_filter(
                         $tokens[$returnPtr]['conditions'],
@@ -136,19 +141,20 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
                 );
 
                 if ($countClosure === 0) {
-                    $nextPtr = $phpcsFile->findNext(T_WHITESPACE, $returnPtr + 1, $end, true);
+                    $nextPtr = $phpcsFile->findNext(T_WHITESPACE, ($returnPtr + 1), $end, true);
                     if ($tokens[$nextPtr]['code'] !== T_SEMICOLON) {
                         $hasReturnValue = true;
                     }
                 }
-                $start = $returnPtr + 1;
+
+                $start = ($returnPtr + 1);
             } else {
                 $doFind = false;
-            }
-        }
+            }//end if
+        }//end while
 
         if ($return !== null) {
-            if ($hasReturnValue) {
+            if ($hasReturnValue === true) {
                 $content = $tokens[($return + 2)]['content'];
                 if (empty($content) === true || $tokens[($return + 2)]['code'] !== T_DOC_COMMENT_STRING) {
                     $error = 'Return type missing for @return tag in function comment';
@@ -161,22 +167,23 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
                     'OmmitReturn'
                 );
 
-                if ($fix) {
+                if ($fix === true) {
                     $this->_deleteLine($phpcsFile, $return);
                 }
             }
         } else {
-            if ($hasReturnValue) {
+            if ($hasReturnValue === true) {
                 $error = 'Missing @return tag in function comment';
                 $phpcsFile->addError($error, $tokens[$commentStart]['comment_closer'], 'MissingReturn');
             }
         }//end if
 
-    } /* end processReturn() */
+    }//end processReturn()
+
 
     /**
      * Fix a line by deleting it
-     * TODO needs to be refactored, copy of ClassCommentSniff
+     * TODO needs to be refactored, copy of ClassCommentSniff.
      *
      * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
      * @param int                  $stackPtr  pointer to the line to be deleted.
@@ -193,10 +200,14 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i--) {
             $phpcsFile->fixer->replaceToken($i, '');
         }
+
         for ($i = $stackPtr; $tokens[$i]['line'] === $line; $i++) {
             $phpcsFile->fixer->replaceToken($i, '');
         }
 
         $phpcsFile->fixer->endChangeset();
-    }
+
+    }//end _deleteLine()
+
+
 }//end class
