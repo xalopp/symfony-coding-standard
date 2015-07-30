@@ -17,3 +17,7 @@ $f = new \Exception();
 $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 $e = new $eName();
 $e = new $eName();
+$e = new static(array_filter($this->foo(), $p), $this->faa);
+$e = new self();
+$e = new static();
+$e = new self();
