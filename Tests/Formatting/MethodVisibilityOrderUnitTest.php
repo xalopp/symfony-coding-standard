@@ -27,7 +27,7 @@
  * @license   http://spdx.org/licenses/MIT MIT License
  * @link      http://symfony.com/doc/current/contributing/code/standards.html
  */
-class Symfony_Tests_Formatting_PropertyAndMethodOrderUnitTest extends AbstractSniffUnitTest
+class Symfony_Tests_Formatting_MethodVisibilityOrderUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -44,19 +44,20 @@ class Symfony_Tests_Formatting_PropertyAndMethodOrderUnitTest extends AbstractSn
     protected function getErrorList($testFile = '')
     {
         switch ($testFile) {
-        case 'PropertyAndMethodOrderUnitTest.pass.1.inc':
+        case 'MethodVisibilityOrderUnitTest.pass.1.inc':
             return array();
-        case 'PropertyAndMethodOrderUnitTest.fail.1.inc':
+        case 'MethodVisibilityOrderUnitTest.fail.1.inc':
             return array(
-                    22 => 1,
-                    23 => 1,
-                    29 => 1,
+                    11 => 1,
+                    18 => 1,
+                    25 => 1,
+                    27 => 1,
                    );
-        case 'PropertyAndMethodOrderUnitTest.fail.2.inc':
+        case 'MethodVisibilityOrderUnitTest.fail.2.inc':
             return array(
-                    21 => 1,
-                    22 => 1,
-                    26 => 1,
+                    13 => 1,
+                    17 => 1,
+                    24 => 1,
                    );
         }//end switch
 

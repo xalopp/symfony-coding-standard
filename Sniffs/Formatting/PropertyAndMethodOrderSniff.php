@@ -18,7 +18,6 @@
  *
  * Throws errors if properties and methods are in wrong order.
  * Symfony coding standard specifies: "Declare class properties before methods;
- * Declare public methods first, then protected ones and finally private ones;".
  *
  * @category PHP
  * @package  PHP_CodeSniffer-Symfony2
@@ -27,7 +26,8 @@
  * @license  http://spdx.org/licenses/MIT MIT License
  * @link     http://symfony.com/doc/current/contributing/code/standards.html
  */
-class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSniffer_Standards_AbstractScopeSniff
+class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff
+    extends PHP_CodeSniffer_Standards_AbstractScopeSniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -55,32 +55,7 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
      *
      * @var int
      */
-    private $_functionEnd = -1;
-
-    /**
-     * Should be public, protected, private or null
-     *
-     * @var string
-     */
-    private $_lowestFunctionVisibility = null;
-
-    /**
-     * Allowed visibilities and order
-     *
-     * @var array
-     */
-    private $_allowedVisibilities = array(
-                                     'public'    => array(
-                                                     'public',
-                                                     'protected',
-                                                     'private',
-                                                    ),
-                                     'protected' => array(
-                                                     'protected',
-                                                     'private',
-                                                    ),
-                                     'private'   => array('private'),
-                                    );
+    private $_functionEndPtr = -1;
 
 
     /**
@@ -116,16 +91,15 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
         $currScope
     ) {
         if ($this->_currentFilename !== $phpcsFile->getFilename()) {
-            $this->_currentFilename          = $phpcsFile->getFilename();
-            $this->_lowestFunctionVisibility = null;
-            $this->_functionEnd   = -1;
-            $this->_functionFound = false;
+            $this->_currentFilename = $phpcsFile->getFilename();
+            $this->_functionEndPtr  = -1;
+            $this->_functionFound   = false;
         }
 
-        if ($stackPtr < $this->_functionEnd) {
+        if ($stackPtr < $this->_functionEndPtr) {
             return;
         } else {
-            $this->_functionEnd = -1;
+            $this->_functionEndPtr = -1;
         }
 
         $tokens       = $phpcsFile->getTokens();
@@ -134,35 +108,22 @@ class Symfony_Sniffs_Formatting_PropertyAndMethodOrderSniff extends PHP_CodeSnif
         if ($currentToken['type'] === 'T_FUNCTION') {
             $this->_functionFound = true;
             $methodProperties     = $phpcsFile->getMethodProperties($stackPtr);
-            $visibility           = $methodProperties['scope'];
 
             if ($methodProperties['is_abstract'] === true) {
-                $this->_functionEnd = $phpcsFile->findNext(
+                $this->_functionEndPtr = $phpcsFile->findNext(
                     array(T_SEMICOLON),
                     $stackPtr
                 );
             } else {
-                $this->_functionEnd = $currentToken['scope_closer'];
+                $this->_functionEndPtr = $currentToken['scope_closer'];
             }
-
-            if ($this->_lowestFunctionVisibility === null) {
-                $this->_lowestFunctionVisibility = $visibility;
-            } else {
-                $allowedVisibilities = $this->_allowedVisibilities[$this->_lowestFunctionVisibility];
-
-                if (false === in_array($visibility, $allowedVisibilities)) {
-                    $phpcsFile->addError(
-                        'Methods must me ordered public, protect, private',
-                        $stackPtr
-                    );
-                } else {
-                    $this->_lowestFunctionVisibility = $visibility;
-                }
-            }
-        } else if ($currentToken['type'] === 'T_VARIABLE' && $this->_functionFound === true) {
+        } else if ($this->_functionFound === true) {
+            // 'T_VARIABLE'
             $phpcsFile->addError(
                 'class properties must be declared before methods',
-                $stackPtr
+                $stackPtr,
+                null,
+                'DeclarePropertiesBeforeMethods'
             );
         }//end if
 
