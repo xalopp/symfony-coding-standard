@@ -45,6 +45,7 @@ class Symfony_Tests_Formatting_MethodVisibilityOrderUnitTest extends AbstractSni
     {
         switch ($testFile) {
         case 'MethodVisibilityOrderUnitTest.pass.1.inc':
+        case 'MethodVisibilityOrderUnitTest.pass.2.inc':
             return array();
         case 'MethodVisibilityOrderUnitTest.fail.1.inc':
             return array(

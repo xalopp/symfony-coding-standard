@@ -38,6 +38,17 @@ class Symfony_Sniffs_Formatting_MethodVisibilityOrderSniff
     public $supportedTokenizers = array('PHP');
 
     /**
+     * List of function names, that should be treated like function
+     * with public visibility.
+     *
+     * @var array
+     */
+    public $whitelist = array(
+                         'setUp',
+                         'tearDown',
+                        );
+
+    /**
      * Current file name
      *
      * @var string
@@ -124,6 +135,11 @@ class Symfony_Sniffs_Formatting_MethodVisibilityOrderSniff
         $methodProperties = $phpcsFile->getMethodProperties($stackPtr);
         $visibility       = $methodProperties['scope'];
 
+        $methodName = $this->_getMethodName($phpcsFile, $stackPtr);
+        if (true === in_array($methodName, $this->whitelist)) {
+            $visibility = 'public';
+        }
+
         if ($methodProperties['is_abstract'] === true) {
             $this->_functionEnd = $phpcsFile->findNext(
                 array(T_SEMICOLON),
@@ -154,6 +170,26 @@ class Symfony_Sniffs_Formatting_MethodVisibilityOrderSniff
         return;
 
     }//end processTokenWithinScope()
+
+
+    /**
+     * Get the function name.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile All the tokens found in the document.
+     * @param int                  $stackPtr  The position of the current token in
+     *                                        the stack passed in $tokens.
+     *
+     * @return mixed
+     */
+    private function _getMethodName(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens          = $phpcsFile->getTokens();
+        $functionNamePtr = $phpcsFile->findNext(T_STRING, ($stackPtr + 1));
+        $functionName    = $tokens[$functionNamePtr]['content'];
+
+        return $functionName;
+
+    }//end _getMethodName()
 
 
 }//end class
