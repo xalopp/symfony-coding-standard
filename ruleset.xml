@@ -47,5 +47,13 @@
         <severity>0</severity>
     </rule>
 
+   <!-- Use squiz concatenation operator spacing -->
+   <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="spacing" value="0"/>
+            <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
+
 </ruleset>
 
