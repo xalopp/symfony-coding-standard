@@ -110,11 +110,23 @@ class Pass
     }
 
     /**
-     * @{@inheritdoc}
+     * {@inheritdoc}
      */
     public function inheritedStuff()
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function inheritedFrom($a, $b, $c)
+    {
+        if ($a === $b) {
+            throw new \Exception();
+        }
+
+        return $a + $b + $c
     }
 
     /**

@@ -46,12 +46,21 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        if (false === $commentEnd = $phpcsFile->findPrevious(array(T_COMMENT, T_DOC_COMMENT, T_CLASS, T_FUNCTION, T_OPEN_TAG), ($stackPtr - 1))) {
+        if (false === $commentEnd = $phpcsFile->findPrevious(array(T_COMMENT, T_DOC_COMMENT, T_DOC_COMMENT_CLOSE_TAG, T_CLASS, T_FUNCTION, T_OPEN_TAG), ($stackPtr - 1))) {
             return;
         }
 
         $tokens = $phpcsFile->getTokens();
         $code   = $tokens[$commentEnd]['code'];
+
+        if ($code === T_DOC_COMMENT_CLOSE_TAG) {
+            $commentBegin = $tokens[$commentEnd]['comment_opener'];
+            $length       = ($commentEnd - $commentBegin);
+            $content      = $phpcsFile->getTokensAsString($commentBegin, $length);
+            if (strpos($content, '{@inheritdoc}') !== false) {
+                return;
+            }
+        }
 
         // A comment is not required on protected/private methods.
         $method          = $phpcsFile->getMethodProperties($stackPtr);
@@ -109,10 +118,6 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
                 }
 
                 $return = $tag;
-            }
-
-            if (preg_match('#{@inheritdoc}#i', $tokens[$tag]['content']) === 1) {
-                return;
             }
         }//end foreach
 
