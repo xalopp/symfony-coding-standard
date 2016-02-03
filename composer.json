@@ -13,8 +13,8 @@
             }
         }
     ],
-    "name": "playbloom/php_codesniffer_symfony",
-    "description": "PHP_CodeSniffer ruleset for Symfony PSR coding standards.",
+    "name": "xalopp/symfony-coding-standard",
+    "description": "PHP CodeSniffer ruleset for Symfony coding standards.",
     "type": "library",
     "keywords": [
         "phpcs",
@@ -22,17 +22,17 @@
         "standards",
         "PSR"
     ],
-    "homepage": "https://github.com/ludofleury/symfony-coding-standard",
+    "homepage": "https://github.com/xalopp/symfony-coding-standard",
     "license": "MIT",
     "authors": [
         {
-            "name": "Ludovic Fleury",
-            "email": "ludo.fleury@gmail.com"
+            "name": "Xaver Loppenstedt",
+            "email": "xaver@loppenstedt.de"
         }
     ],
     "support": {
-        "issues": "https://github.com/ludofleury/symfony-coding-standard/issues",
-        "source": "https://github.com/ludofleury/symfony-coding-standard"
+        "issues": "https://github.com/xalopp/symfony-coding-standard/issues",
+        "source": "https://github.com/xalopp/symfony-coding-standard"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "*"

@@ -79,7 +79,7 @@ class Symfony_Sniffs_NamingConventions_ExceptionSuffixSniff implements PHP_CodeS
 
         $stackPtr = $originalStackPtr;
 
-        while ($tokens[$stackPtr]['line'] == $line) {
+        while ($tokens[$stackPtr]['line'] === $line) {
             if ('T_STRING' === $tokens[$stackPtr]['type']) {
                 if (substr($tokens[$stackPtr]['content'], -9) !== 'Exception') {
                      $phpcsFile->addError(

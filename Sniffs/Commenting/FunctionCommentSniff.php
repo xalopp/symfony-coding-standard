@@ -132,7 +132,7 @@ class Symfony_Sniffs_Commenting_FunctionCommentSniff extends PEAR_Sniffs_Comment
         $hasReturnValue = false;
 
         $doFind = true;
-        while ($doFind) {
+        while ($doFind === true) {
             $returnPtr = $phpcsFile->findNext(T_RETURN, $start, $end);
             if ($returnPtr !== false) {
                 // Ignore nested functions / closures.
