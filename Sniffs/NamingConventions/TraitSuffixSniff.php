@@ -58,7 +58,7 @@ class Symfony_Sniffs_NamingConventions_TraitSuffixSniff implements PHP_CodeSniff
         $tokens = $phpcsFile->getTokens();
         $line   = $tokens[$stackPtr]['line'];
 
-        while ($tokens[$stackPtr]['line'] == $line) {
+        while ($tokens[$stackPtr]['line'] === $line) {
             if ('T_STRING' === $tokens[$stackPtr]['type']) {
                 if (substr($tokens[$stackPtr]['content'], -5) !== 'Trait') {
                     $phpcsFile->addError(

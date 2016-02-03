@@ -61,7 +61,7 @@ class Symfony_Sniffs_NamingConventions_InterfaceSuffixSniff implements PHP_CodeS
         $tokens = $phpcsFile->getTokens();
         $line   = $tokens[$stackPtr]['line'];
 
-        while ($tokens[$stackPtr]['line'] == $line) {
+        while ($tokens[$stackPtr]['line'] === $line) {
             if ('T_STRING' === $tokens[$stackPtr]['type']) {
                 if (substr($tokens[$stackPtr]['content'], -9) !== 'Interface') {
                     $phpcsFile->addError(
