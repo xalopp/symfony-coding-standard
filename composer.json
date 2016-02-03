@@ -13,6 +13,11 @@
             }
         }
     ],
+    "extra": {
+        "installer-paths": {
+            "vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony": ["xalopp/symfony-coding-standard"]
+        }
+    },
     "name": "xalopp/symfony-coding-standard",
     "description": "PHP CodeSniffer ruleset for Symfony coding standards.",
     "type": "library",
@@ -38,6 +43,7 @@
         "squizlabs/php_codesniffer": "*"
     },
     "require": {
+        "composer/installers": "~1.0",
         "php": ">=5.4.0"
     },
     "minimum-stability": "dev"
