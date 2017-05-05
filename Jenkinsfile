@@ -5,6 +5,7 @@ pipeline {
             steps {
                 sh 'php --version'
                 echo 'Install composer'
+                sh 'ls -l'
             }
         }
         stage('build') {
