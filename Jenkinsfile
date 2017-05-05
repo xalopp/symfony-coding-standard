@@ -1,5 +1,10 @@
 pipeline {
-    agent { docker 'composer/composer' }
+    agent {
+      docker {
+        image 'composer/composer'
+        args '-v /etc/passwd:/etc/passwd'
+      }
+    }
     stages {
         stage('prepare') {
             steps {
