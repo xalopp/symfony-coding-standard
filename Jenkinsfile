@@ -5,29 +5,20 @@ pipeline {
             steps {
                 sh 'php --version'
                 echo 'Install composer'
-                sh 'ls -l'
-            }
-        }
-        stage('build') {
-            steps {
-                sh 'php --version'
+                sh 'composer install --dev'
+                sh 'mkdir -p vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony'
+                sh 'cp -R Sniffs/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs/'
+                sh 'cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/'
+                sh 'cp ruleset.xml vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                sh 'cd vendor/squizlabs/php_codesniffer ; phpunit --filter Symfony_'
+                sh './vendor/squizlabs/php_codesniffer/scripts/phpcs Sniffs --standard=PHPCS --report=summary -np'
             }
         }
     }
 }
-
-//  - composer install --dev
-//  - mkdir -p vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
-//  - cp -R Sniffs/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs/
-//  - cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/
-//  - cp ruleset.xml vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
-//
-//script:
-//  - (cd vendor/squizlabs/php_codesniffer ; phpunit --filter Symfony_)
-//  - ./vendor/squizlabs/php_codesniffer/scripts/phpcs Sniffs --standard=PHPCS --report=summary -np
 
