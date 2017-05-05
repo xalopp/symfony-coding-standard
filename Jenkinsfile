@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh 'cd vendor/squizlabs/php_codesniffer ; phpunit --filter Symfony_'
+                sh 'cd vendor/squizlabs/php_codesniffer ; ../../bin/phpunit --filter Symfony_'
                 sh './vendor/squizlabs/php_codesniffer/scripts/phpcs Sniffs --standard=PHPCS --report=summary -np'
             }
         }
