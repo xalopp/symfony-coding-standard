@@ -35,7 +35,8 @@
         "source": "https://github.com/xalopp/symfony-coding-standard"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "2.9.x-dev",
+        "phpunit/phpunit": "~4.0"
     },
     "require": {
         "php": ">=5.4.0"
