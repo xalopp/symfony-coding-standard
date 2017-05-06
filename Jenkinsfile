@@ -21,7 +21,7 @@ pipeline {
             steps {
                 echo 'Testing..'
                 sh 'cd vendor/squizlabs/php_codesniffer ; ../../bin/phpunit --filter Symfony_'
-                sh './vendor/squizlabs/php_codesniffer/bin/phpcs Sniffs --standard=PHPCS --report=summary -np'
+                sh './vendor/squizlabs/php_codesniffer/scripts/phpcs Sniffs --standard=PHPCS --report=summary -np'
             }
         }
     }
