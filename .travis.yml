@@ -10,6 +10,7 @@ php:
 
 before_script:
   - composer install --dev
+  - ./vendor/squizlabs/php_codesniffer/scripts/phpcs --version
   - mkdir -p vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
   - cp -R Sniffs/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs/
   - cp -R Tests/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Tests/
