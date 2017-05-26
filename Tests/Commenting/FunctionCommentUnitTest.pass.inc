@@ -46,7 +46,7 @@ class Pass
     /**
      * write stuff info
      *
-     * @param StuffInfo $info
+     * @param StuffInfo $info information
      */
     public function writeStuffInfo(StuffInfo $info)
     {
