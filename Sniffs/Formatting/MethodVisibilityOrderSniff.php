@@ -157,7 +157,7 @@ class Symfony_Sniffs_Formatting_MethodVisibilityOrderSniff
 
             if (false === in_array($visibility, $allowedVisibilities)) {
                 $phpcsFile->addError(
-                    'Methods must me ordered public, protect, private',
+                    'Methods must be ordered public, protect, private',
                     $stackPtr,
                     null,
                     'OrderMethodsByVisibility'
