@@ -7,9 +7,10 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 before_script:
-  - composer install --dev
+  - composer install
   - ./vendor/squizlabs/php_codesniffer/scripts/phpcs --version
   - mkdir -p vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony
   - cp -R Sniffs/ vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/Symfony/Sniffs/
